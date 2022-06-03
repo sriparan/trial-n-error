@@ -1,0 +1,26 @@
+yum update -y
+yum install docker -y
+usermod -a -G docker ec2-user
+service docker start
+
+
+#kuce ctl install
+export TEMP_DIR=/tmp
+export TARGET_DIR=/usr/bin
+curl -o ${TEMP_DIR}/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+chmod +x ${TEMP_DIR}/kubectl
+cp ${TEMP_DIR}/kubectl ${TARGET_DIR}/kubectl 
+
+
+
+#Lets install mini cube and start the times
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+install minikube-linux-amd64 /usr/local/bin/minikube
+minikube config set driver docker
+#apt install conntrack
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod +x get_helm.sh
+./get_helm.sh
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+minikube start
