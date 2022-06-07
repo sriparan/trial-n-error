@@ -1,4 +1,4 @@
-yum update -y
+#!yum update -y
 yum install docker -y
 usermod -a -G docker ec2-user
 service docker start
@@ -23,4 +23,8 @@ chmod +x get_helm.sh
 ./get_helm.sh
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
-minikube start
+#minikube start
+
+#lets get cloudwatch agent
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+sudo yum install amazon-cloudwatch-agent
