@@ -2,6 +2,7 @@ import { Stack, StackProps, CfnOutput, CfnOutputProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as ec2 from "aws-cdk-lib/aws-ec2";
+
 import {
   InstanceClass,
   SubnetType,
@@ -21,10 +22,10 @@ export interface SGProps extends StackProps {
   ingressRules: IngressRule[];
 }
 
-export class SGIacStack extends Stack {
+export class SGIacStack extends Construct {
   secGroup: ec2.SecurityGroup;
   constructor(scope: Construct, id: string, props: SGProps) {
-    super(scope, id, props);
+    super(scope, id);
 
     this.secGroup = new ec2.SecurityGroup(
       this,
