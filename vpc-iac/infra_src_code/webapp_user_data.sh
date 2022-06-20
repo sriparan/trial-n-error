@@ -25,6 +25,10 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 #minikube start
 
+yum intall -y git
+git clone https://github.com/sriparan/trial-n-error
+
 #lets get cloudwatch agent
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
 sudo yum install amazon-cloudwatch-agent
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:./trial-n-error/vpc-iac/infra_src_code/cw-config.json

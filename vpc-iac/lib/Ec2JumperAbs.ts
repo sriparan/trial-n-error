@@ -16,7 +16,9 @@ export default function createJumperInstance(
     instanceType: new ec2.InstanceType("t3.micro"),
     instanceName: name,
     keyName: "usvirginia_keys",
-    machineImage: new ec2.AmazonLinuxImage(),
+    machineImage: new ec2.AmazonLinuxImage({
+      generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+    }),
     vpc: vpcInst,
     vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
   };

@@ -27,13 +27,28 @@ minikube start
 
 
 
-yum intall -y git
+yum install -y git
 git clone https://github.com/sriparan/trial-n-error
 
+#lets get cloudwatch agent, no lets do this from the Cloudformation SSM configuration :)
+# wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+# sudo yum install amazon-cloudwatch-agent
+# Adding the configuration for the 
+# sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:./trial-n-error/vpc-iac/infra_src_code/cw-config.json
 
-#lets get cloudwatch agent
-wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
-sudo yum install amazon-cloudwatch-agent
-sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:./trial-n-error/vpc-iac/infra_src_code/cw-config.json
+wget  https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh 
+bash ./install.sh
+. ~/.nvm/nvm.sh
+node -e "console.log('Running Node.js ' + process.version)"
+
+# nvm install node
+# sudo yum install gcc
+nvm install --lts node
+node -e "console.log('Running Node.js ' + process.version)"
 
 
+
+cd trial-n-error/srctop/simple-webapp/echo-express/standalone/
+npm install
+nmp run build
+npm run server

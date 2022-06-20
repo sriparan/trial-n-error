@@ -18,11 +18,11 @@ export class VpcIacStack extends Stack {
 
     this.myvpc = new vpc.Vpc(this, "dev-vpc", {
       maxAzs: 1,
-
       cidr: "10.20.0.0/16",
       subnetConfiguration: [
         { subnetType: SubnetType.PUBLIC, name: "public_subnet" },
         { subnetType: SubnetType.PRIVATE_WITH_NAT, name: "private_nat_subnet" },
+
         {
           subnetType: SubnetType.PRIVATE_ISOLATED,
           name: "private_isolated_subnet",
