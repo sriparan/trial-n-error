@@ -18,8 +18,7 @@ export interface IngressRule {
 }
 
 export interface SGProps extends StackProps {
-  sgParams: ec2.SecurityGroupProps;
-  ingressRules: IngressRule[];
+  vpc: ec2.IVpc;
 }
 
 export class SGIacStack extends Construct {
@@ -27,12 +26,17 @@ export class SGIacStack extends Construct {
   constructor(scope: Construct, id: string, props: SGProps) {
     super(scope, id);
 
-    this.secGroup = new ec2.SecurityGroup(
-      this,
-      "security-group",
-      props.sgParams
-    );
-    props.ingressRules.forEach((c: IngressRule) => {
+    const GROUP_NAME = id + "sg";
+    const params: ec2.SecurityGroupProps = {
+      vpc: props.vpc,
+      allowAllOutbound: true,
+    };
+    const rules: IngressRule[] = [
+      { peer: ec2.Peer.anyIpv4(), connection: ec2.Port.allTraffic() },
+    ];
+
+    this.secGroup = new ec2.SecurityGroup(this, "security-group", params);
+    rules.forEach((c: IngressRule) => {
       this.secGroup.addIngressRule(c.peer, c.connection);
     });
 

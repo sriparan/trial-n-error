@@ -4,6 +4,7 @@ import {
   CfnOutput,
   CfnOutputProps,
   Tags,
+  cfnTagToCloudFormation,
 } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as sgs from "./sc_commons";
@@ -11,6 +12,7 @@ import * as sgs from "./sc_commons";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ascaling from "aws-cdk-lib/aws-autoscaling";
+import { IngressRule, SGIacStack, SGProps } from "./sg_iac-stack";
 
 import {
   InstanceClass,
@@ -28,7 +30,7 @@ const MAX_CAPACITY = 4;
 const MIN_CAPACITY = 1;
 
 export interface ASGProps extends StackProps {
-  vpc: ec2.Vpc;
+  vpc: ec2.IVpc;
 }
 
 // Create a Web app launch template, fix the script etc for my application, instance types etc.
@@ -60,14 +62,19 @@ function buildLaunchTemplate(
   return lt;
 }
 
-export class ASGStack extends Construct {
+export class ASGStack extends Stack {
+  secGroup: ec2.SecurityGroup;
   constructor(scope: Construct, id: string, props: ASGProps) {
-    super(scope, id);
-    const webAppsg = sgs.createWebAppSecurityGroup(
-      this,
-      props.vpc,
-      id + "-wasg"
-    );
+    super(scope, id, props);
+
+    const webAppsg = new SGIacStack(this, "sg", {
+      env: props.env,
+      vpc: props.vpc,
+    });
+
+    this.secGroup = webAppsg.secGroup;
+
+    //sgs.createWebAppSecurityGroup(this, props.vpc, id + "-wasg");
 
     const asgInstance = new ascaling.AutoScalingGroup(this, id + "-asg", {
       vpc: props.vpc,
@@ -82,10 +89,10 @@ export class ASGStack extends Construct {
       ),
     });
 
-    Tags.of(this).add("apps", "Webapp");
+    // Tags.of(this).add("apps", "Webapp");
 
-    new CfnOutput(this, "param1", {
-      value: asgInstance.autoScalingGroupName,
-    } as CfnOutputProps);
+    // new CfnOutput(this, "param1", {
+    //   value: asgInstance.autoScalingGroupName,
+    // } as CfnOutputProps);
   }
 }

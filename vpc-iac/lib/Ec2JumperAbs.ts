@@ -20,6 +20,7 @@ export default function createJumperInstance(
       generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
     }),
     vpc: vpcInst,
+    
     vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
   };
 

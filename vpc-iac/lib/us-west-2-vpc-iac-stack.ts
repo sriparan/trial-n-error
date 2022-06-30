@@ -1,11 +1,25 @@
-import { Stack, StackProps, CfnOutput, CfnOutputProps } from "aws-cdk-lib";
+import {
+  Stack,
+  NestedStack,
+  StackProps,
+  CfnOutput,
+  CfnOutputProps,
+  NestedStackProps,
+} from "aws-cdk-lib";
 import { Construct } from "constructs";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as vpc from "aws-cdk-lib/aws-ec2";
-import { IRouteTable, SubnetType, VpcProps } from "aws-cdk-lib/aws-ec2";
+import {
+  CfnRouteTable,
+  IRouteTable,
+  SubnetType,
+  Vpc,
+  VpcProps,
+} from "aws-cdk-lib/aws-ec2";
 import { VpcConfig } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { Ec2IacStack, JumperEc2Props } from "../lib/ec2_iac-stack";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
+import { SecretStringValueBeta1 } from "aws-cdk-lib/aws-secretsmanager";
 
 class MySingleAZVPC extends vpc.Vpc {
   publicSubnet: vpc.ISubnet;
@@ -33,14 +47,14 @@ class MySingleAZVPC extends vpc.Vpc {
     });
   }
 }
-export class USWest2VpcIacStack extends Stack {
+export class USWest2VpcIacStack extends NestedStack {
   myvpc: MySingleAZVPC;
 
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props?: NestedStackProps) {
     super(scope, id, props);
 
     this.myvpc = new MySingleAZVPC(this, "dev-vpc", {
-      availabilityZones: ["us-west-2b"],
+      availabilityZones: ["us-west-2b", "us-west-2a"],
       cidr: "10.20.0.0/16",
       subnetConfiguration: [
         {
@@ -106,23 +120,43 @@ export class USWest2VpcIacStack extends Stack {
   }
 }
 
-export interface ExtraAzProps extends StackProps {
-  vpcParent: MySingleAZVPC;
+// export interface ExtraAzProps extends StackProps {
+//   vpcParent: MySingleAZVPC;
+// }
+interface ExtraAzProps extends StackProps {
+  parentVPCId: string;
+  routeTableId: string;
 }
 export class ExtraAz extends Stack {
+  // readonly rootvpc: Vpc;
+
   constructor(scope: Construct, id: string, props?: ExtraAzProps) {
     super(scope, id, props);
     if (props) {
-      
-      const vpcParent = props.vpcParent;
-      console.log(vpcParent.privateNatSubnetRouteTable);
-      const sub1 = new ec2.Subnet(this, "azSubnet1", {
+      // const { myvpc } = new USWest2VpcIacStack(this, "DevVPCStack", {
+      //   env: { region: "us-west-2" },
+      // } as NestedStackProps);
+
+      // this.rootvpc = props.parentVPC;
+      // this.rootvpc = vpcParent;
+      console.log(props.parentVPCId);
+      console.log(props.routeTableId);
+      let sub1 = new ec2.Subnet(this, "azSubnet1", {
         availabilityZone: "us-west-2-phx-1a",
         cidrBlock: "10.20.100.10/24",
         mapPublicIpOnLaunch: true,
-        vpcId: vpcParent.vpcId,
-        routeTable: vpcParent.privateNatSubnetRouteTable,
+        vpcId: props.parentVPCId,
       } as vpc.SubnetProps);
+
+      const cfnSubnetRouteTableAssociation =
+        new ec2.CfnSubnetRouteTableAssociation(
+          this,
+          "MyCfnSubnetRouteTableAssociation",
+          {
+            routeTableId: props.routeTableId,
+            subnetId: sub1.subnetId,
+          }
+        );
 
       new CfnOutput(this, "lzSubnet", {
         value: sub1.subnetId,
