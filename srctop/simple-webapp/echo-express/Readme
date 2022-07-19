@@ -10,3 +10,8 @@ npm install
 tcs && node out/server.js
 
 Have a dotenv package , basic usage to read paramenters in a .env file.
+
+
+openssl rsa -in private_key_enc.txt -out private_key.txt
+
+docker build -t mynode .
