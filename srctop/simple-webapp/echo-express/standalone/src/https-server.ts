@@ -11,8 +11,6 @@ var certificate = fs.readFileSync("src/certificate.txt");
 var credentials = {
   key: privateKey,
   cert: certificate,
-  requestCert: true,
-  rejectUnauthorized: true,
 };
 
 const app = express();
