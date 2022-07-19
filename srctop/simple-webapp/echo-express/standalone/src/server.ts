@@ -30,5 +30,5 @@ app.get("/", (req, res) => {
 
 const serverinst = https.createServer(credentials, app);
 serverinst.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`HTTPs server app listening on port ${port}`);
 });

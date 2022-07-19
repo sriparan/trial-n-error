@@ -19,5 +19,5 @@ app.get("/", (req, res) => {
 
 const serverinst = https.createServer(app);
 serverinst.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Http server app listening on port ${port}`);
 });
