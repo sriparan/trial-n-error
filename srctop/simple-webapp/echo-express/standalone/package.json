@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "node ./out/server.js",
+    "https-server": "node ./out/server.js",
+    "http-server": "node ./out/http-server.js",
     "build": "tsc"
   },
   "author": "",

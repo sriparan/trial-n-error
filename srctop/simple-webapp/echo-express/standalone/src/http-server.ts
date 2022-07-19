@@ -6,19 +6,8 @@ import fs from "fs";
 
 dotenv.config();
 
-var privateKey = fs.readFileSync("src/decrypted_private_key.txt");
-var certificate = fs.readFileSync("src/certificate.txt");
-var apig_cert = fs.readFileSync("src/apig-cert.txt");
-var credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: apig_cert,
-  requestCert: true,
-  rejectUnauthorized: true,
-};
-
 const app = express();
-let port: number = 443;
+let port: number = 80;
 
 if (typeof process.env.PORT == "string") {
   port = parseInt(process.env.PORT);
@@ -28,7 +17,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-const serverinst = https.createServer(credentials, app);
+const serverinst = https.createServer(app);
 serverinst.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
