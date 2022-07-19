@@ -12,6 +12,6 @@ EXPOSE 443
 CMD ["/bin/bash","./startup.sh"]
 
 #docker build -t mynode .
-# echo "#NO VULUMES docker run -p80:80 -p 443:443 -p 4430:4430 mynode --rm -it /bin/bash" >> /home/ec2-usr/.bashrc
+# echo "#NO VULUMES docker run -p80:80 -p 443:443 -p 4430:4430  --rm -it mynode /bin/bash" >> /home/ec2-usr/.bashrc
 # echo "#WITH VOLUME docker run --rm -it -v ${PWD}:/usr/src/app -w /usr/src/app mynode /bin/bash" >> /home/ec2-usr/.bashrc
 # echo "expose port with -p" >> /home/ec2-user/.bashrc
