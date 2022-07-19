@@ -1,0 +1,18 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+out
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+scratch-leet

@@ -11,9 +11,9 @@ export interface VpcIAcStackProps extends StackProps {
   azs: string[];
 }
 export class VpcIacStack extends Stack {
-  publicVpcId: vpc.ISubnet;
-  privateSolatedSubnet: vpc.ISubnet;
-  privateNatSubnet: vpc.ISubnet;
+  publicsubnets: vpc.ISubnet[] = [];
+  privateIsolatedSubnet: vpc.ISubnet[] = [];
+  privateNatSubnet: vpc.ISubnet[] = [];
   myvpc: vpc.Vpc;
 
   constructor(scope: Construct, id: string, props?: VpcIAcStackProps) {
@@ -48,7 +48,7 @@ export class VpcIacStack extends Stack {
 
     let count = 0;
     this.myvpc.publicSubnets.forEach((element: vpc.ISubnet) => {
-      this.publicVpcId = element;
+      this.publicsubnets.push(element);
 
       new CfnOutput(this, `publicsubnet-${count}`, {
         value: element.subnetId,
@@ -65,7 +65,7 @@ export class VpcIacStack extends Stack {
 
     let privCount = 0;
     this.myvpc.privateSubnets.forEach((e: vpc.ISubnet) => {
-      this.privateNatSubnet = e;
+      this.privateNatSubnet.push(e);
       new CfnOutput(this, `privatesubnet-${privCount}`, {
         value: e.subnetId,
         exportName: `privatesubnet-${privCount}`,
@@ -79,7 +79,7 @@ export class VpcIacStack extends Stack {
 
     let isoCount = 0;
     this.myvpc.isolatedSubnets.forEach((e: vpc.ISubnet) => {
-      this.privateSolatedSubnet = e;
+      this.privateIsolatedSubnet.push(e);
       new CfnOutput(this, `privateisosubnet-${isoCount}`, {
         value: e.subnetId,
         exportName: `privateisosubnet-${isoCount}`,

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "https-server": "node ./out/server.js",
+    "https-server": "node ./out/https-server.js",
+    "mtls-server": "node ./out/mtls-server.js",
     "http-server": "node ./out/http-server.js",
     "build": "tsc"
   },

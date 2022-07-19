@@ -9,23 +9,23 @@ import { ASGStack, ASGProps } from "../lib/asg-waec2-stack";
 
 import { IngressRule, SGIacStack, SGProps } from "../lib/sg_iac-stack";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import createJumperInstance from "../lib/Ec2JumperAbs";
+import JumperInstance from "../lib/Ec2JumperAbs";
 import createMinikubeInstance from "../lib/Ec2MinikubeJumperAbs";
 import createWebappInstance from "../lib/Ec2WebappAbs";
+import { MyAPIGateway } from "../lib/api-gw-stack";
 
 import { RuleScope } from "aws-cdk-lib/aws-config";
 import * as sgs from "../lib/sc_commons";
 import S3EventSampleStack from "../lib/s3-event-sample-stack";
+import { PrivateCA, PrivateCAStackProps } from "../lib/privateca-stack";
 import { StackProps } from "aws-cdk-lib";
 
 let inDevMode = true;
 
 const app = new cdk.App();
 
+let AMI_ID = "ami-00370c9cadeff4fc9";
 if (inDevMode) {
-  // const vpcStack = new USWest2VpcIacStack(app, "DevVPCStack", {
-  //   env: { region: "us-west-2" },
-  // });
   const vpcStack = new VpcIacStack(app, "VpcIacStack", {
     env: { region: "us-west-2" },
     azs: ["us-west-2a", "us-west-2b"],
@@ -37,20 +37,25 @@ if (inDevMode) {
     routeTableId: cdk.Fn.importValue("privatesubnetrt-0"),
   });
 
-  const webAppASG = new ASGStack(app, "web-asg", {
-    env: { region: "us-west-2" },
-    vpc: vpcStack.myvpc,
-  });
-
   const myALB = new ALBStack(app, "web-alb", {
     env: { region: "us-west-2" },
     vpc: vpcStack.myvpc,
-    sg: webAppASG.secGroup,
+    publicSubnets: vpcStack.publicsubnets,
+    privateNatSubnet: vpcStack.privateNatSubnet,
+    privateIsolatedSubnet: vpcStack.privateIsolatedSubnet,
   });
 
-  // createJumperInstance(app, vpcStack.myvpc, "bastion");
+  new JumperInstance(app, "bastion-node", {
+    env: { region: "us-west-2" },
+    vpc: vpcStack.myvpc,
+    user_data_script: "./infra_Src_code/jumper_user_data.sh",
+  });
 
+  new MyAPIGateway(app, "rest-api-ep", { env: { region: "us-west-2" } });
   new S3EventSampleStack(app, "s3-event-test");
+
+  new PrivateCA(app, "private-ca", { env: { region: "us-west-2" } });
+
   // new RDSStack(app, "RDSstack");
 } else {
   // const vpcStack = new VpcIacStack(app, "VpcIacStack", {

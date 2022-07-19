@@ -9,7 +9,6 @@ export function createJumperSecurityGroup(
   name: string
 ): SGIacStack {
   const securityGroup = new SGIacStack(scope, name, {
-    // env: { region: "us-east-1" },
     vpc: vpcInst,
   });
   return securityGroup;

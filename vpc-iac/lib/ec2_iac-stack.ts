@@ -39,8 +39,6 @@ export class Ec2IacStack extends Construct {
 
     jumperEc2.addToRolePolicy(
       new iam.PolicyStatement({
-        // Restrict to listing and describing tables
-        // principals: [new iam.AnyPrincipal()],
         actions: ["dynamodb:DescribeTable", "dynamodb:ListTables", "s3:*"],
         resources: ["*"],
       })

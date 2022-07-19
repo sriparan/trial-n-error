@@ -31,6 +31,7 @@ const MIN_CAPACITY = 1;
 
 export interface ASGProps extends StackProps {
   vpc: ec2.IVpc;
+  sg: ec2.SecurityGroup;
 }
 
 // Create a Web app launch template, fix the script etc for my application, instance types etc.
@@ -53,31 +54,38 @@ function buildLaunchTemplate(
     blockDevices: [
       // Block device configuration rest
     ],
+    
     instanceType: ec2.InstanceType.of(
       ec2.InstanceClass.T3,
       ec2.InstanceSize.NANO
     ),
     keyName: KEY_NAME,
+    securityGroup: sg,
+    
   });
   return lt;
 }
 
-export class ASGStack extends Stack {
-  secGroup: ec2.SecurityGroup;
+export class ASGStack extends Construct {
+  // secGroup: ec2.SecurityGroup;
+  asgInstance: ascaling.AutoScalingGroup;
+
   constructor(scope: Construct, id: string, props: ASGProps) {
-    super(scope, id, props);
+    super(scope, id);
 
-    const webAppsg = new SGIacStack(this, "sg", {
-      env: props.env,
-      vpc: props.vpc,
-    });
+    // const webAppsg = new SGIacStack(this, "sg", {
+    //   env: props.env,
+    //   vpc: props.vpc,
+    // });
 
-    this.secGroup = webAppsg.secGroup;
+    // this.secGroup = props.sg; // webAppsg.secGroup;
 
     //sgs.createWebAppSecurityGroup(this, props.vpc, id + "-wasg");
 
-    const asgInstance = new ascaling.AutoScalingGroup(this, id + "-asg", {
+    this.asgInstance = new ascaling.AutoScalingGroup(this, id + "-asg", {
       vpc: props.vpc,
+      allowAllOutbound: true,
+      // associatePublicIpAddress: true,
       desiredCapacity: DESIRED_CAPACITY,
       maxCapacity: MAX_CAPACITY,
       minCapacity: MIN_CAPACITY,
@@ -85,7 +93,7 @@ export class ASGStack extends Stack {
         this,
         "webapp-lt",
         USER_DATA_SCRIPT,
-        webAppsg.secGroup
+        props.sg
       ),
     });
 
