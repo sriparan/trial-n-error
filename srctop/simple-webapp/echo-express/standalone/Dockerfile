@@ -7,9 +7,11 @@ RUN npm install
 RUN npm install -D
 RUN npm run build
 RUN chmod 755 ./startup.sh
-EXPOSE 80
+EXPOSE 8080
+EXPOSE 4430
 EXPOSE 443
-CMD ["/bin/bash","./startup.sh"]
+ENTRYPOINT  ["npm","run"]
+
 
 
 # sudo rm -rf trial-n-error
@@ -18,11 +20,15 @@ CMD ["/bin/bash","./startup.sh"]
 # git clone https://github.com/sriparan/trial-n-error /home/ec2-user/trial-n-error
 # cd trial-n-error/srctop/simple-webapp/echo-express/standalone/
 # docker build -t mynode .
-# docker run -p8080:8080 -p 443:443 -p 4430:4430  --rm -it mynode /bin/bash
-# npm run build
-# npm run http-server&
-# npm run https-server&
-# npm run mtls-server&
+
+# docker run -p 8080:8080 -d mynode http-server
+# docker run -p 4430:4430 -d mynode https-server
+# docker run -p 443:443 -d mynode mtls-server
+
+# # docker run -p8080:8080 --name http-server --rm -it mynode /bin/bash
+# # docker run -p 443:443  --name https-server --rm -it mynode /bin/bash
+# # docker run -p 4430:4430  --name mtls-server --rm -it mynode /bin/bash
+
 
 
 
