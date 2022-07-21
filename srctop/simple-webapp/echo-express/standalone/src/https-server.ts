@@ -15,16 +15,21 @@ var credentials = {
 
 const app = express();
 let port: number = 4430;
+let count = 0;
 
 if (typeof process.env.PORT == "string") {
   port = parseInt(process.env.PORT);
 }
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  console.log(`new request https${count}`);
+  res.send(`Hello World https! ${count}`);
+  count++;
 });
 
 const serverinst = https.createServer(credentials, app);
+serverinst.keepAliveTimeout = 10;
+serverinst.setTimeout(10);
 serverinst.listen(port, () => {
   console.log(`HTTPs server app listening on port ${port}`);
 });

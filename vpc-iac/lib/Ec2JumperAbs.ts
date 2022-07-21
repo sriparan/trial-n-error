@@ -20,7 +20,7 @@ export default class JumperInstance extends Stack {
     });
 
     const instanceProps = {
-      instanceType: new ec2.InstanceType("t3.micro"),
+      instanceType: new ec2.InstanceType("t3.xlarge"),
       instanceName: name,
       keyName: "usvirginia_keys",
       machineImage: new ec2.AmazonLinuxImage({
