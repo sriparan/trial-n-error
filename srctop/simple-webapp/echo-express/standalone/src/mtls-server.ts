@@ -8,7 +8,7 @@ dotenv.config();
 
 var privateKey = fs.readFileSync("src/decrypted_private_key.txt");
 var certificate = fs.readFileSync("src/certificate.txt");
-var apig_cert = fs.readFileSync("src/apig-cert.txt");
+var apig_cert = fs.readFileSync("src/certificate_chain.txt");
 var credentials = {
   key: privateKey,
   cert: certificate,
