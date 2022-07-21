@@ -13,10 +13,10 @@ CMD ["/bin/bash","./startup.sh"]
 
 
 # sudo rm -rf trial-n-error
-# git clone https://github.com/sriparan/trial-n-error /home/ec2-user/trial-n-error
-# cd trial-n-error/srctop/simple-webapp/echo-express/standalone/
 # docker container prune
 # docker image rm mynode
+# git clone https://github.com/sriparan/trial-n-error /home/ec2-user/trial-n-error
+# cd trial-n-error/srctop/simple-webapp/echo-express/standalone/
 # docker build -t mynode .
 # docker run -p8080:8080 -p 443:443 -p 4430:4430  --rm -it mynode /bin/bash
 

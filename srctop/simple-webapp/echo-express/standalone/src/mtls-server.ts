@@ -19,13 +19,16 @@ var credentials = {
 
 const app = express();
 let port: number = 443;
+let count = 0;
 
 if (typeof process.env.PORT == "string") {
   port = parseInt(process.env.PORT);
 }
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  console.log(`new request mtls${count}`);
+  res.send(`Hello World mtls! ${count}`);
+  count++;
 });
 
 const serverinst = https.createServer(credentials, app);
