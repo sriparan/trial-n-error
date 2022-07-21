@@ -12,13 +12,13 @@ EXPOSE 443
 CMD ["/bin/bash","./startup.sh"]
 
 
-rm -rf trial-n-error
-git clone https://github.com/sriparan/trial-n-error /home/ec2-user/trial-n-error
-cd trial-n-error/srctop/simple-webapp/echo-express/standalone/
-docker container prune
-docker image rm mynode
-docker build -t mynode .
-docker run -p8080:8080 -p 443:443 -p 4430:4430  --rm -it mynode /bin/bash
+# rm -rf trial-n-error
+# git clone https://github.com/sriparan/trial-n-error /home/ec2-user/trial-n-error
+# cd trial-n-error/srctop/simple-webapp/echo-express/standalone/
+# docker container prune
+# docker image rm mynode
+# docker build -t mynode .
+# docker run -p8080:8080 -p 443:443 -p 4430:4430  --rm -it mynode /bin/bash
 
 
 #git clone https://github.com/sriparan/trial-n-error /home/ec2-user/trial-n-error
