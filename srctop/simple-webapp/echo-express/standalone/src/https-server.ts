@@ -8,9 +8,12 @@ dotenv.config();
 
 var privateKey = fs.readFileSync("src/decrypted_private_key.txt");
 var certificate = fs.readFileSync("src/certificate.txt");
+var ca = fs.readFileSync("src/certificate_chain.txt");
+
 var credentials = {
   key: privateKey,
   cert: certificate,
+  ca: ca,
 };
 
 const app = express();
@@ -29,7 +32,6 @@ app.get("/", (req, res) => {
 
 const serverinst = https.createServer(credentials, app);
 serverinst.keepAliveTimeout = 10;
-serverinst.setTimeout(10);
 serverinst.listen(port, () => {
   console.log(`HTTPs server app listening on port ${port}`);
 });

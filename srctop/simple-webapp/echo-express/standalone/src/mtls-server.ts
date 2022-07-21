@@ -14,7 +14,7 @@ var credentials = {
   cert: certificate,
   ca: apig_cert,
   requestCert: true,
-  rejectUnauthorized: true,
+  rejectUnauthorized: false,
 };
 
 const app = express();
