@@ -2,7 +2,10 @@
 !jest.config.js
 *.d.ts
 node_modules
+yaml
+bin
 
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+k8s-configs

@@ -4,6 +4,7 @@ import {
   CfnOutput,
   CfnOutputProps,
   Tags,
+  aws_elasticloadbalancingv2,
 } from "aws-cdk-lib";
 import { Construct } from "constructs";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
@@ -39,7 +40,9 @@ export class Ec2IacStack extends Construct {
 
     jumperEc2.addToRolePolicy(
       new iam.PolicyStatement({
-        actions: ["dynamodb:DescribeTable", "dynamodb:ListTables", "s3:*"],
+        //actions: ["dynamodb:DescribeTable", "dynamodb:ListTables", "s3:*"],
+
+        actions: ["*"],
         resources: ["*"],
       })
     );
@@ -53,4 +56,6 @@ export class Ec2IacStack extends Construct {
       value: jumperEc2.instanceId,
     } as CfnOutputProps);
   }
+
+  //  new aws_elasticloadbalancingv2.CfnTargetGroup
 }

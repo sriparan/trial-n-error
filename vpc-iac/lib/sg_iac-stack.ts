@@ -34,10 +34,17 @@ export class SGIacStack extends Construct {
     const rules: IngressRule[] = [
       { peer: ec2.Peer.anyIpv4(), connection: ec2.Port.allTraffic() },
     ];
+    const egressRules: IngressRule[] = [
+      { peer: ec2.Peer.anyIpv4(), connection: ec2.Port.allTraffic() },
+    ];
 
     this.secGroup = new ec2.SecurityGroup(this, "security-group", params);
     rules.forEach((c: IngressRule) => {
       this.secGroup.addIngressRule(c.peer, c.connection);
+    });
+
+    egressRules.forEach((c: IngressRule) => {
+      this.secGroup.addEgressRule(c.peer, c.connection);
     });
 
     new CfnOutput(this, id, {

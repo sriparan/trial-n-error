@@ -51,7 +51,13 @@ if (inDevMode) {
     user_data_script: "./infra_Src_code/jumper_user_data.sh",
   });
 
-  new MyAPIGateway(app, "rest-api-ep", { env: { region: "us-west-2" } });
+  new JumperInstance(app, "tmp-bastion-node", {
+    env: { region: "us-west-2" },
+    vpc: vpcStack.myvpc,
+    user_data_script: "./infra_Src_code/jumper_user_data.sh",
+  });
+
+  new MyAPIGateway(app, "rest-ep", { env: { region: "us-west-2" } });
   new S3EventSampleStack(app, "s3-event-test");
 
   new PrivateCA(app, "private-ca", { env: { region: "us-west-2" } });

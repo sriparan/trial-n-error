@@ -10,8 +10,10 @@ import { Construct } from "constructs";
 import * as sgs from "./sc_commons";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as ec2 from "aws-cdk-lib/aws-ec2";
+
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ascaling from "aws-cdk-lib/aws-autoscaling";
+
 import { IngressRule, SGIacStack, SGProps } from "./sg_iac-stack";
 
 import {
@@ -54,14 +56,13 @@ function buildLaunchTemplate(
     blockDevices: [
       // Block device configuration rest
     ],
-    
+
     instanceType: ec2.InstanceType.of(
       ec2.InstanceClass.T3,
-      ec2.InstanceSize.NANO
+      ec2.InstanceSize.LARGE
     ),
     keyName: KEY_NAME,
     securityGroup: sg,
-    
   });
   return lt;
 }
