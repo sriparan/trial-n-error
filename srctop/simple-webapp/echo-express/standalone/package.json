@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "https-server": "node ./out/https-server.js",
-    "mtls-server": "node ./out/mtls-server.js",
-    "http-server": "node ./out/http-server.js",
+    "https-server": "tsc && node ./out/https-server.js",
+    "mtls-server": "tsc && node ./out/mtls-server.js",
+    "http-server": "tsc && node ./out/http-server.js",
     "build": "tsc"
   },
   "author": "",

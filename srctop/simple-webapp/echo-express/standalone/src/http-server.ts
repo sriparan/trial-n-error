@@ -14,14 +14,24 @@ if (typeof process.env.PORT == "string") {
   port = parseInt(process.env.PORT);
 }
 
-app.get("/", (req, res) => {
-  console.log(`new request ${count}`);
-  res.send(`Hello World! ${count}`);
+app.get("/*", (req, res) => {
+  const dataobj: object = {
+    path: req.url,
+    params: req.params,
+    headers: req.headers,
+    originalURL: req.originalUrl,
+  };
+  const resp: string = JSON.stringify(dataobj);
+  console.log(`received ${count} ${resp}`);
+  res.send(`REquest count  ${count} - INPUT-  ${resp}`);
+  // res.send(`Path I got is  ${req.url}`);
+  // res.send(`params I got are -> ${req.params}`);
+  // res.send(`body?  -> ${req.body}`);
   res.end();
   count++;
 });
 
-app.get("/test", (req, res) => {
+app.get("/test/*", (req, res) => {
   res.send("Hello World Test!");
 });
 
