@@ -7,3 +7,7 @@ out
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+vue-samplers
+elasti-search-test
+android_key_material
+AwesomeTSProject
