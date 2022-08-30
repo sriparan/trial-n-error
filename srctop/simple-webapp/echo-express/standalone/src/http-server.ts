@@ -11,6 +11,13 @@ import {
 } from "@aws-sdk/client-sts";
 // import { AWSError } from "aws-sdk";
 
+import {
+  KMSClient,
+  Get,
+  GetCallerIdentityCommandInput,
+  GetCallerIdentityCommandOutput,
+} from "@aws-sdk/client-kms";
+
 dotenv.config();
 
 const app = express();
@@ -21,36 +28,38 @@ if (typeof process.env.PORT == "string") {
   port = parseInt(process.env.PORT);
 }
 
+async function getCallerId() {
+  var dataobj = { callerId: {} };
+  const mysts = new STSClient({});
+  const callerIdentityCommand = new GetCallerIdentityCommand({});
+
+  try {
+    const data = await mysts.send(callerIdentityCommand);
+    console.log(`This is data = ${data.Account}`);
+    console.log(`This is data = ${data.Arn}`);
+    console.log(`This is data = ${data.UserId}`);
+    dataobj["callerId"] = {
+      account: data.Account,
+      arn: data.Arn,
+      userId: data.UserId,
+    };
+  } catch (err) {
+    console.log(`This is err = ${err}`);
+    // dataobj.err = err;
+  } finally {
+    console.log("All done with the sts properties");
+  }
+  return dataobj;
+}
 app.get("/*", (req, res) => {
   var dataobj = {
     path: req.url,
     params: req.params,
     headers: req.headers,
     originalURL: req.originalUrl,
-    callerId: {},
+    callerId: getCallerId(),
     err: "",
   };
-  const mysts = new STSClient({});
-  const callerIdentityCommand = new GetCallerIdentityCommand({});
-  mysts
-    .send(callerIdentityCommand)
-    .then((data) => {
-      console.log(`This is data = ${data.Account}`);
-      console.log(`This is data = ${data.Arn}`);
-      console.log(`This is data = ${data.UserId}`);
-      dataobj["callerId"] = {
-        account: data.Account,
-        arn: data.Arn,
-        userId: data.UserId,
-      };
-    })
-    .catch((err) => {
-      console.log(`This is err = ${err}`);
-      dataobj.err = err;
-    })
-    .finally(() => {
-      console.log("All done with the sts properties");
-    });
 
   // await callerIdentity.send(
   //   (err: AWSError, data: STS.Types.GetCallerIdentityResponse) => {
