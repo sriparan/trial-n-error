@@ -22,7 +22,7 @@ if (typeof process.env.PORT == "string") {
 }
 
 app.get("/*", (req, res) => {
-  const dataobj = {
+  var dataobj = {
     path: req.url,
     params: req.params,
     headers: req.headers,
