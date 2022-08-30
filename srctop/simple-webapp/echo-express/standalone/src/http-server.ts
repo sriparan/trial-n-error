@@ -62,14 +62,14 @@ async function getKMSINfo() {
   return response;
 }
 
-app.get("/*", (req, res) => {
+app.get("/*", async (req, res) => {
   var dataobj = {
     path: req.url,
     params: req.params,
     headers: req.headers,
     originalURL: req.originalUrl,
-    callerId: getCallerId(),
-    kmsInfo: getKMSINfo(),
+    callerId: await getCallerId(),
+    kmsInfo: await getKMSINfo(),
     err: "",
   };
 
