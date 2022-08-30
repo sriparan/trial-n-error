@@ -10,7 +10,7 @@ RUN chmod 755 ./startup.sh
 EXPOSE 8080
 EXPOSE 4430
 EXPOSE 443
-ENTRYPOINT  ["npm","run"]
+ENTRYPOINT  ["npm","run", "http-server"]
 
 
 

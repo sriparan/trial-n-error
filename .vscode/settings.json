@@ -1,0 +1,4 @@
+{
+    "python.defaultInterpreterPath": "C:\\gitws\\trial-n-error\\srctop\\elasti-search-test\\myenv\\Scripts\\python.exe",
+    "python.autoComplete.extraPaths": ["C:\\gitws\\trial-n-error\\srctop\\elasti-search-test\\myenv\\Lib"]
+}
