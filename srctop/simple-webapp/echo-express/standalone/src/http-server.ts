@@ -11,12 +11,7 @@ import {
 } from "@aws-sdk/client-sts";
 // import { AWSError } from "aws-sdk";
 
-import {
-  KMSClient,
-  Get,
-  GetCallerIdentityCommandInput,
-  GetCallerIdentityCommandOutput,
-} from "@aws-sdk/client-kms";
+import { KMSClient } from "@aws-sdk/client-kms";
 
 dotenv.config();
 
@@ -51,6 +46,7 @@ async function getCallerId() {
   }
   return dataobj;
 }
+
 app.get("/*", (req, res) => {
   var dataobj = {
     path: req.url,
