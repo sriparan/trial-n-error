@@ -11,7 +11,9 @@ import {
 } from "@aws-sdk/client-sts";
 // import { AWSError } from "aws-sdk";
 
-import { KMSClient } from "@aws-sdk/client-kms";
+import { KMSClient, DescribeKeyCommand } from "@aws-sdk/client-kms"; // ES Modules import
+
+import { GetBucketMetricsConfigurationOutputFilterSensitiveLog } from "@aws-sdk/client-s3";
 
 dotenv.config();
 
@@ -44,7 +46,20 @@ async function getCallerId() {
   } finally {
     console.log("All done with the sts properties");
   }
+  console.log("The function response => ");
+  console.log(JSON.stringify(dataobj));
   return dataobj;
+}
+
+async function getKMSINfo() {
+  // const { KMSClient, DescribeKeyCommand } = require("@aws-sdk/client-kms"); // CommonJS import
+  const client = new KMSClient({});
+  const command = new DescribeKeyCommand({
+    KeyId: "38bf9a03-cffe-4ac8-a574-1dc057e71f9c",
+  });
+  const response = await client.send(command);
+  console.log(response.KeyMetadata?.Enabled);
+  return response;
 }
 
 app.get("/*", (req, res) => {
@@ -54,6 +69,7 @@ app.get("/*", (req, res) => {
     headers: req.headers,
     originalURL: req.originalUrl,
     callerId: getCallerId(),
+    kmsInfo: getKMSINfo(),
     err: "",
   };
 
