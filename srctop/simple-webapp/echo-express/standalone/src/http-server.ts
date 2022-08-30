@@ -32,16 +32,22 @@ app.get("/*", (req, res) => {
   };
   const mysts = new STSClient({});
   const callerIdentityCommand = new GetCallerIdentityCommand({});
-  mysts.send(callerIdentityCommand).then(
-    (data) => {
-      console.log(`This is data = ${data}`);
+  mysts
+    .send(callerIdentityCommand)
+    .then((data) => {
+      console.log(`This is data = ${data.Account}`);
+      console.log(`This is data = ${data.Arn}`);
+      console.log(`This is data = ${data.UserId}`);
       dataobj.callerId = data;
-    },
-    (err) => {
+    })
+    .catch((err) => {
       console.log(`This is err = ${err}`);
       dataobj.err = err;
-    }
-  );
+    })
+    .finally(() => {
+      console.log("All done with the sts properties");
+    });
+
   // await callerIdentity.send(
   //   (err: AWSError, data: STS.Types.GetCallerIdentityResponse) => {
   //     if (err) {
