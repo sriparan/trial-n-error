@@ -34,9 +34,11 @@ app.get("/*", (req, res) => {
   const callerIdentityCommand = new GetCallerIdentityCommand({});
   mysts.send(callerIdentityCommand).then(
     (data) => {
+      console.log(`This is data = ${data}`);
       dataobj.callerId = data;
     },
     (err) => {
+      console.log(`This is err = ${err}`);
       dataobj.err = err;
     }
   );
