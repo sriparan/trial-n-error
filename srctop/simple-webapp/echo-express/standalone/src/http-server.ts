@@ -38,7 +38,11 @@ app.get("/*", (req, res) => {
       console.log(`This is data = ${data.Account}`);
       console.log(`This is data = ${data.Arn}`);
       console.log(`This is data = ${data.UserId}`);
-      dataobj["callerId"] = data;
+      dataobj["callerId"] = {
+        account: data.Account,
+        arn: data.Arn,
+        userId: data.UserId,
+      };
     })
     .catch((err) => {
       console.log(`This is err = ${err}`);
