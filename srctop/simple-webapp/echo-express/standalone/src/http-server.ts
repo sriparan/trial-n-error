@@ -32,23 +32,23 @@ async function getCallerId() {
 
   try {
     const data = await mysts.send(callerIdentityCommand);
-    console.log(`This is data = ${data.Account}`);
-    console.log(`This is data = ${data.Arn}`);
-    console.log(`This is data = ${data.UserId}`);
+    console.log(`This is accoutn Id = ${data.Account}`);
+    console.log(`This is arn = ${data.Arn}`);
+    console.log(`This is user Id = ${data.UserId}`);
     dataobj["callerId"] = {
       account: data.Account,
       arn: data.Arn,
       userId: data.UserId,
     };
+    console.log("The function response => ");
+    console.log(JSON.stringify(dataobj));
+    return dataobj;
   } catch (err) {
     console.log(`This is err = ${err}`);
     // dataobj.err = err;
   } finally {
     console.log("All done with the sts properties");
   }
-  console.log("The function response => ");
-  console.log(JSON.stringify(dataobj));
-  return dataobj;
 }
 
 async function getKMSINfo() {
@@ -58,7 +58,7 @@ async function getKMSINfo() {
     KeyId: "38bf9a03-cffe-4ac8-a574-1dc057e71f9c",
   });
   const response = await client.send(command);
-  console.log(response.KeyMetadata?.Enabled);
+  console.log(`Is the key enabled ${response.KeyMetadata?.Enabled}`);
   return response;
 }
 
