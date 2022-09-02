@@ -58,8 +58,8 @@ if (inDevMode) {
   });
 
   new MyAPIGateway(app, "rest-ep", { env: { region: "us-west-2" } });
-  new S3EventSampleStack(app, "s3-event-test");
 
+  new S3EventSampleStack(app, "s3-event-test");
   new PrivateCA(app, "private-ca", { env: { region: "us-west-2" } });
 
   // new RDSStack(app, "RDSstack");

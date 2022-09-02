@@ -68,8 +68,8 @@ app.get("/*", async (req, res) => {
     params: req.params,
     headers: req.headers,
     originalURL: req.originalUrl,
-    // callerId: await getCallerId(),
-    // kmsInfo: await getKMSINfo(),
+    callerId: await getCallerId(),
+    kmsInfo: await getKMSINfo(),
     err: "",
   };
 
