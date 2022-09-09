@@ -13,6 +13,7 @@ import JumperInstance from "../lib/Ec2JumperAbs";
 import createMinikubeInstance from "../lib/Ec2MinikubeJumperAbs";
 import createWebappInstance from "../lib/Ec2WebappAbs";
 import { MyAPIGateway } from "../lib/api-gw-stack";
+import { Route53Health, RTStackProps } from "../lib/route53_health";
 
 import { RuleScope } from "aws-cdk-lib/aws-config";
 import * as sgs from "../lib/sc_commons";
@@ -25,6 +26,7 @@ let inDevMode = true;
 const app = new cdk.App();
 
 let AMI_ID = "ami-00370c9cadeff4fc9";
+
 if (inDevMode) {
   const vpcStack = new VpcIacStack(app, "VpcIacStack", {
     env: { region: "us-west-2" },
@@ -57,7 +59,22 @@ if (inDevMode) {
     user_data_script: "./infra_Src_code/jumper_user_data.sh",
   });
 
-  new MyAPIGateway(app, "rest-ep", { env: { region: "us-west-2" } });
+  new MyAPIGateway(app, "rest-ep-east1", { env: { region: "us-east-1" } });
+  const east2apigw = new MyAPIGateway(app, "rest-ep-east2", {
+    env: { region: "us-east-2" },
+  });
+  // new Route53Health(app, "health-us-east2", {
+  //   env: { region: "us-east-2" },
+  //   apiURL: "Sdfds",
+  //   path: "prod",
+  //   type: "HTTPS",
+  // });
+  new MyAPIGateway(app, "rest-ep-west1", { env: { region: "us-west-1" } });
+  new MyAPIGateway(app, "rest-ep-west2", { env: { region: "us-west-2" } });
+  new MyAPIGateway(app, "rest-ap-se1", { env: { region: "ap-southeast-1" } });
+  new MyAPIGateway(app, "rest-ap-se2", { env: { region: "ap-southeast-2" } });
+  new MyAPIGateway(app, "rest-ap-south1", { env: { region: "ap-south-1" } });
+  new MyAPIGateway(app, "rest-eu-west1", { env: { region: "eu-west-1" } });
 
   new S3EventSampleStack(app, "s3-event-test");
   new PrivateCA(app, "private-ca", { env: { region: "us-west-2" } });
