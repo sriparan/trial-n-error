@@ -33,7 +33,7 @@ export class Ec2IacStack extends Construct {
 
     //    new iam.Role(this, "ec2Role", {assumedBy:iam.ServicePrincipal()})
     const file_data = readFileSync(props.user_data_script, "utf-8");
-    console.log(file_data);
+    // console.log(file_data);
     jumperEc2.addUserData(file_data);
     jumperEc2.addSecurityGroup(props.sg);
     Tags.of(this).add("node-cat", id);

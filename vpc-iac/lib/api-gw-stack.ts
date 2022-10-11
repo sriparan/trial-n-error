@@ -21,13 +21,13 @@ export class MyAPIGateway extends Stack {
   constructor(scope?: App, id?: string, props?: StackProps) {
     super(scope, id, props);
 
-    const clientCert = new apigateway.CfnClientCertificate(
-      this,
-      "myclientcert",
-      {
-        description: "myclientCert",
-      }
-    );
+    // const clientCert = new apigateway.CfnClientCertificate(
+    //   this,
+    //   "myclientcert",
+    //   {
+    //     description: "myclientCert",
+    //   }
+    // );
 
     const myHostedZone = route53.HostedZone.fromHostedZoneAttributes(
       this,
@@ -53,7 +53,7 @@ export class MyAPIGateway extends Stack {
     });
 
     let echoResources = api.root.addResource("echo");
-    let nlbLink = api.root.addResource("intoVPC");
+    // let nlbLink = api.root.addResource("intoVPC");
 
     domainName.addBasePathMapping(api, {
       stage: api.deploymentStage,
@@ -81,20 +81,20 @@ export class MyAPIGateway extends Stack {
 
     echoResources.addMethod("GET", echoLambdaIntegration);
 
-    let httpIntegration = new apigateway.HttpIntegration("https://tomato.com", {
-      proxy: false,
-      httpMethod: "GET",
-      options: {
-        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_MATCH,
-      },
-    });
+    // let httpIntegration = new apigateway.HttpIntegration("https://tomato.com", {
+    //   proxy: false,
+    //   httpMethod: "GET",
+    //   options: {
+    //     passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_MATCH,
+    //   },
+    // });
 
-    nlbLink.addMethod("POST", echoLambdaIntegration, {
-      authorizationType: apigateway.AuthorizationType.NONE,
-    });
-    nlbLink.addMethod("GET", httpIntegration, {
-      authorizationType: apigateway.AuthorizationType.NONE,
-    });
+    // nlbLink.addMethod("POST", echoLambdaIntegration, {
+    //   authorizationType: apigateway.AuthorizationType.NONE,
+    // });
+    // nlbLink.addMethod("GET", httpIntegration, {
+    //   authorizationType: apigateway.AuthorizationType.NONE,
+    // });
 
     new CfnOutput(this, "lambdaEcho", { value: lambdaFunction.functionArn });
 
@@ -103,30 +103,31 @@ export class MyAPIGateway extends Stack {
       exportName: "apiEndpoint",
     });
 
-    new CfnOutput(this, "endpointDomainName", {
-      value: domainName.domainNameAliasDomainName,
-    });
-    new CfnOutput(this, "clientCert", {
-      value: clientCert.attrClientCertificateId,
-    });
+    // new CfnOutput(this, "endpointDomainName", {
+    //   value: domainName.domainNameAliasDomainName,
+    // });
+    // new CfnOutput(this, "clientCert", {
+    //   value: clientCert.attrClientCertificateId,
+    // });
 
-    new route53.CfnHealthCheck(this, "healthCheck", {
-      healthCheckConfig: {
-        fullyQualifiedDomainName: domainName.domainName,
-        type: "HTTPS",
-        resourcePath: "/prod/echo",
-      },
-      healthCheckTags: [
-        {
-          key: "Name",
-          value: "hc-" + props?.env?.region,
-        },
-      ],
-    });
+    // new route53.CfnHealthCheck(this, "healthCheck", {
+    //   healthCheckConfig: {
+    //     fullyQualifiedDomainName: api.domainName,
+    //     type: "HTTPS",
+    //     resourcePath: "/prod/echo",
+    //   },
+    //   healthCheckTags: [
+    //     {
+    //       key: "Name",
+    //       value: "hc-" + props?.env?.region,
+    //     },
+    //   ],
+    // });
 
-    this.apipath = Fn.split("/", api.url)[2];
-    new CfnOutput(this, "exportapipath", {
-      value: this.apipath,
-    });
+    // this.apipath = Fn.split("/", api.url)[2];
+
+    // new CfnOutput(this, "exportapipath", {
+    //   value: this.apipath,
+    // });
   }
 }
